@@ -26,3 +26,35 @@ class Product {
     );
   }
 }
+
+class Customers{
+  int? id;
+  String customerName;
+  String customerAddress;
+  String customerContact;
+  String gst;
+
+  Customers({this.id, required this.customerName, required this.customerAddress,required this.customerContact,required this.gst});
+
+  // Convert a User object to a Map object
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'customerName': customerName,
+      'customerAddress': customerAddress,
+      'customerContact':customerContact,
+      'gst':gst,
+    };
+  }
+
+  // Convert a Map object to a User object
+  factory Customers.fromMap(Map<String, dynamic> map) {
+    return Customers(
+      id: map['id'],
+      customerName: map['customerName'],
+      customerAddress: map['customerAddress'],
+      customerContact: map['customerContact'],
+      gst:map['gst'],
+    );
+  }
+}

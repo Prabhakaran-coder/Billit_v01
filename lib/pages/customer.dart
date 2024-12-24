@@ -1,5 +1,9 @@
+import 'package:billit/database/product_database_helper.dart';
 import 'package:billit/models/menuheader.dart';
+import 'package:billit/models/product_db_data.dart';
 import 'package:billit/models/providercurrentindex.dart';
+import 'package:billit/pages/customer_table.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -12,14 +16,45 @@ class Customer extends StatefulWidget {
 
 class _CustomerState extends State<Customer> {
    final _formKey = GlobalKey<FormState>();
+   late Future<List<Customers>> _Customers;
+   late ProductDatabaseHelper _databaseHelper;
+    bool gst = false;
+     
+  @override
+  void initState() {
+    super.initState();
+    _databaseHelper = ProductDatabaseHelper.instance;
+  }
+   void _addCustomers() async {
+    final String customerNameController = _customerNameController.text;
+    final String customerAddressController = _customerAddressController.text ;
+    final String customerContactController = _customerContactController.text;
+    final String gstNumber = gst ? _gstController.text.trim() : "";
 
+    if (customerNameController.isNotEmpty && customerAddressController.isNotEmpty&& customerContactController.isNotEmpty) {
+      final newCustomer = Customers(customerName: customerNameController, customerAddress: customerAddressController, customerContact: customerContactController,gst:gstNumber);
+      var result = await _databaseHelper.insertCustomers(newCustomer);
+      // _products=<product>[];
+      setState(() {
+        _Customers = _databaseHelper.getCustomers();
+      });
+      print(result);
+      _customerNameController.clear();
+      _customerAddressController.clear();
+      _customerContactController.clear();
+      _gstController.clear();
+    }
+  }
+   
    final TextEditingController _customerNameController = TextEditingController();
-final TextEditingController _customerAddressController = TextEditingController();
-final TextEditingController _customerContactController = TextEditingController();
+   final TextEditingController _customerAddressController = TextEditingController();
+   final TextEditingController _customerContactController = TextEditingController();
+   final TextEditingController _gstController = TextEditingController(); 
+
   @override
   Widget build(BuildContext context) {
     void showcustomerDialog() {
-      customerDialog(context); // Call the dialog here
+      customerDialog(context,_addCustomers); // Call the dialog here
     }
     final menuHeader = Provider.of<MyState>(context).menuHeaderValue;
     return Scaffold(
@@ -33,49 +68,65 @@ final TextEditingController _customerContactController = TextEditingController()
               SizedBox(
                 height: 20.0,
               ),
-             
+             CustomerTable(),
             ],
           )),
     ));
   }
-
-  void customerDialog(BuildContext context, 
-  // Function addProduct
-  ) {
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius:
-                BorderRadius.circular(10), // Optional: adds rounded corners
-          ),
-          child: AnimatedOpacity(
-            opacity: 1.0,
-            duration: Duration(seconds: 50),
-            child: Container(
-              width: double.infinity, // Set custom width
-              height: 350, // Set custom height
-              padding: const EdgeInsets.all(40),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Form(
+void customerDialog(BuildContext context,Function addCustomer) {
+  // Declare GST state here
+  
+  showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext context) {
+      return StatefulBuilder( // Use StatefulBuilder to manage state inside the dialog
+        builder: (BuildContext context, StateSetter setState) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10), // Optional: adds rounded corners
+            ),
+            child: AnimatedOpacity(
+              opacity: 1.0,
+              duration: Duration(seconds: 50),
+              child: Container(
+                width: double.infinity, // Set custom width
+                height: 400, // Set custom height
+                padding: const EdgeInsets.all(40),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Form(
                       key: _formKey,
                       child: Column(
                         children: [
-                          const Text('Products',
+                          const Text('Customers',
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.w500)),
                           Divider(),
                           const SizedBox(height: 20),
-                          // Row for horizontal input fields
+                          Row(
+                            children: [
+                              Text("GST",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 15.0)),
+                              Switch(
+                                value: gst,
+                                activeColor: Colors.green.shade400,
+                                dragStartBehavior: DragStartBehavior.start,
+                                onChanged: (bool value) {
+                                  setState(() {
+                                    gst = value;
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 10,),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              // First input field with label
-
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,22 +148,18 @@ final TextEditingController _customerContactController = TextEditingController()
                                         )),
                                         border: OutlineInputBorder(),
                                         labelText: 'Enter Customer Name',
-                                        //errorText: validateitemname? 'Itemname cant be empty': null,
                                       ),
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
                                           return 'Customer name can\'t be empty';
                                         }
-                                        return null; // Return null if validation passes
+                                        return null;
                                       },
                                     ),
                                   ],
                                 ),
                               ),
-                              const SizedBox(
-                                  width: 20), // Space between the two fields
-
-                              // Second input field with label
+                              const SizedBox(width: 20),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -134,14 +181,12 @@ final TextEditingController _customerContactController = TextEditingController()
                                         )),
                                         border: OutlineInputBorder(),
                                         labelText: 'Enter Customer Address',
-                                        // errorText:
-                                        //     validateqty ? 'Quantity cant be empty' : null,
                                       ),
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
                                           return 'Customer Address can\'t be empty';
-                                        }                                        
-                                        return null; // Return null if validation passes
+                                        }
+                                        return null;
                                       },
                                     ),
                                   ],
@@ -169,8 +214,6 @@ final TextEditingController _customerContactController = TextEditingController()
                                         )),
                                         border: OutlineInputBorder(),
                                         labelText: 'Enter Customer Contact',
-                                        // errorText:
-                                        //     validateprice ? 'Price cant be empty' : null,
                                       ),
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
@@ -179,12 +222,14 @@ final TextEditingController _customerContactController = TextEditingController()
                                         if (int.tryParse(value) == null) {
                                           return 'Enter a valid number for Contact';
                                         }
-                                        return null; // Return null if validation passes
+                                        return null;
                                       },
                                     ),
                                   ],
                                 ),
                               ),
+                              SizedBox(width: 20),
+                              Gst(gst, _gstController),
                             ],
                           ),
                           const SizedBox(height: 40),
@@ -195,8 +240,8 @@ final TextEditingController _customerContactController = TextEditingController()
                                   onPressed: () {
                                     if (_formKey.currentState?.validate() ??
                                         false) {
-                                      // addProduct();
-
+                                          addCustomer();
+                                           print("Validation Succuessful");
                                       Navigator.of(context).pop();
                                     } else {
                                       print("Validation failed");
@@ -268,15 +313,63 @@ final TextEditingController _customerContactController = TextEditingController()
                             ],
                           ),
                         ],
-                      )),
-                ],
-                /////
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
+          );
+        },
+      );
+    },
+  );
+}
+
+Widget Gst(bool gst, TextEditingController _gstController) {
+  if (gst == true) {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Gst Number',
+            style: TextStyle(
+              fontSize: 16.0,
+              fontWeight: FontWeight.w500,
+            ),
           ),
-        );
-      },
+          const SizedBox(height: 5),
+          TextFormField(
+            controller: _gstController,
+            decoration: InputDecoration(
+              focusColor: Color(0xFF1EB386),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  width: 2.0,
+                  style: BorderStyle.solid,
+                  color: Color(0xFF5B89FF),
+                ),
+              ),
+              border: OutlineInputBorder(),
+              labelText: 'Enter Gst',
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Gst can\'t be empty';
+              }
+              return null;
+            },
+          ),
+        ],
+      ),
     );
+  } else {
+    null;   
+    return SizedBox.shrink();
   }
 }
+}
+        
+       
 

@@ -29,12 +29,12 @@ class ProductDatabaseHelper {
   Future<Database> _initDatabase() async {
     // Get the application document directory for storing the database file
     final documentsDirectory = await getApplicationDocumentsDirectory();
-    final path = join(documentsDirectory.path, 'Billit.db'); // Your database path
+    final path = join(documentsDirectory.path, 'Billit_v01.db'); // Your database path
 
     // Open the database and create the tables if not already present
     return await openDatabase(
       path,
-      version: 1,
+      version: 1, // Incremented the version
       onCreate: (db, version) async {
         // Create Products table on first run
         await db.execute(''' 
@@ -45,7 +45,17 @@ class ProductDatabaseHelper {
             price INTEGER
           )
         ''');
+        await db.execute(''' 
+          CREATE TABLE Customers(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            customerName TEXT,
+            customerAddress TEXT,
+            customerContact INTEGER,
+            gst TEXT
+          )
+        ''');
       },
+     
     );
   }
 
@@ -55,12 +65,27 @@ class ProductDatabaseHelper {
     return await db.insert('Products', product.toMap());
   }
 
+  // Insert Customer 
+  Future<int> insertCustomers(Customers Customer) async {
+    final db = await database;
+    return await db.insert('Customers', Customer.toMap());
+  }
+
   // Get all products from the Products table
   Future<List<Product>> getProduct() async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query('Products');
     return List.generate(maps.length, (i) {
-    return Product.fromMap(maps[i]);
+      return Product.fromMap(maps[i]);
+    });
+  }
+
+  // Get all customers from the customers table
+  Future<List<Customers>> getCustomers() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('Customers');
+    return List.generate(maps.length, (i) {
+      return Customers.fromMap(maps[i]);
     });
   }
 
@@ -75,11 +100,32 @@ class ProductDatabaseHelper {
     );
   }
 
+  // Update an existing Customer in the Customer table
+  Future<int> updateCustomers(Customers customer) async {
+    final db = await database;
+    return await db.update(
+      'Customers',
+      customer.toMap(),
+      where: 'id = ?',
+      whereArgs: [customer.id],
+    );
+  }
+
   // Delete a product from the Products table
   Future<int> deleteProduct(int id) async {
     final db = await database;
     return await db.delete(
       'Products',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  // Delete a product from the Products table
+  Future<int> deleteCustomers(int id) async {
+    final db = await database;
+    return await db.delete(
+      'Customers',
       where: 'id = ?',
       whereArgs: [id],
     );
