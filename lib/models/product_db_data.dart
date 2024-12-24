@@ -2,7 +2,7 @@ class Product {
   int? id;
   String itemName;
   int qty;
-  int price;
+  double price;
 
   Product({this.id, required this.itemName, required this.qty,required this.price});
 
@@ -31,7 +31,7 @@ class Customers{
   int? id;
   String customerName;
   String customerAddress;
-  String customerContact;
+  int customerContact;
   String gst;
 
   Customers({this.id, required this.customerName, required this.customerAddress,required this.customerContact,required this.gst});

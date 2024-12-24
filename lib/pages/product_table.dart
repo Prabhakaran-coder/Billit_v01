@@ -1,5 +1,6 @@
 import 'package:billit/database/product_database_helper.dart';
 import 'package:billit/models/product_db_data.dart';
+import 'package:billit/models/textOverFlow.dart';
 import 'package:flutter/material.dart';
 
 class ProductTable extends StatefulWidget {
@@ -25,7 +26,7 @@ class _ProductTableState extends State<ProductTable> {
   void _updateProduct(int id) async {
       final String itemName = _itemnameController.text;
       final int qty = int.tryParse(_qtyController.text) ?? 0;
-      final int price = int.tryParse(_priceController.text) ?? 0;
+      final double price = double.tryParse(_priceController.text) ?? 0.0;
 
       if (itemName.isNotEmpty && qty > 0 && price > 0) {
         final updatedProduct =
@@ -219,9 +220,18 @@ class _ProductTableState extends State<ProductTable> {
     return DataRow(
       cells: [
         DataCell(Text((index + 1).toString())),
-        DataCell(Text(productName)),
-        DataCell(Text(qty)),
-        DataCell(Text(price)),
+        DataCell(Tooltip(message: productName,child: TextOverflowByChars(
+        text:productName,
+        maxCharacters: 5,
+      ))),
+         DataCell(Tooltip(message: productName,child: TextOverflowByChars(
+        text:qty,
+        maxCharacters: 5,
+      ))),
+         DataCell(Tooltip(message: productName,child: TextOverflowByChars(
+        text:price,
+        maxCharacters: 5,
+      ))),
         DataCell(_buildRowWithHover(context, index)),
       ],
     );
@@ -560,4 +570,31 @@ void _showDeleteDialog({required Product product}) {
     }),),
             child: Text("No"),
           )]);});
-}}
+}
+
+}
+
+class TextOverflowByWords extends StatelessWidget {
+  final String text;
+  final int maxWords;
+
+  TextOverflowByWords({required this.text, required this.maxWords});
+
+  String _truncateText() {
+    List<String> words = text.split(' ');
+    if (words.length > maxWords) {
+      return words.sublist(0, maxWords).join(' ') + '...';
+    } else {
+      return text;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      _truncateText(),
+      overflow: TextOverflow.ellipsis,  // Optional, if you want a "..." for visual overflow
+      style: TextStyle(fontSize: 16),
+    );
+  }
+}

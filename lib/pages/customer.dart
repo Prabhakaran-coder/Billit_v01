@@ -28,10 +28,10 @@ class _CustomerState extends State<Customer> {
    void _addCustomers() async {
     final String customerNameController = _customerNameController.text;
     final String customerAddressController = _customerAddressController.text ;
-    final String customerContactController = _customerContactController.text;
+    final int customerContactController = int.tryParse(_customerContactController.text)??0;
     final String gstNumber = gst ? _gstController.text.trim() : "";
 
-    if (customerNameController.isNotEmpty && customerAddressController.isNotEmpty&& customerContactController.isNotEmpty) {
+    if (customerNameController.isNotEmpty && customerAddressController.isNotEmpty&& customerContactController>0) {
       final newCustomer = Customers(customerName: customerNameController, customerAddress: customerAddressController, customerContact: customerContactController,gst:gstNumber);
       var result = await _databaseHelper.insertCustomers(newCustomer);
       // _products=<product>[];

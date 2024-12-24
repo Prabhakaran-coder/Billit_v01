@@ -29,7 +29,7 @@ class ProductDatabaseHelper {
   Future<Database> _initDatabase() async {
     // Get the application document directory for storing the database file
     final documentsDirectory = await getApplicationDocumentsDirectory();
-    final path = join(documentsDirectory.path, 'Billit_v01.db'); // Your database path
+    final path = join(documentsDirectory.path, 'Billit_v02.db'); // Your database path
 
     // Open the database and create the tables if not already present
     return await openDatabase(
@@ -42,7 +42,7 @@ class ProductDatabaseHelper {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             itemName TEXT,
             qty INTEGER,
-            price INTEGER
+            price DOUBLE
           )
         ''');
         await db.execute(''' 

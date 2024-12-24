@@ -31,7 +31,7 @@ class _productState extends State<product> {
   void _addProduct() async {
     final String itemName = _itemnameController.text;
     final int qty = int.tryParse(_qtyController.text) ?? 0;
-    final int price = int.tryParse(_priceController.text) ?? 0;
+    final double price = double.tryParse(_priceController.text) ?? 0.0;
 
     if (itemName.isNotEmpty && qty > 0 && price > 0) {
       final newProduct = Product(itemName: itemName, qty: qty, price: price);
@@ -210,7 +210,7 @@ class _productState extends State<product> {
                                         if (value == null || value.isEmpty) {
                                           return 'Price can\'t be empty';
                                         }
-                                        if (int.tryParse(value) == null) {
+                                        if (double.tryParse(value) == null) {
                                           return 'Enter a valid number for price';
                                         }
                                         return null; // Return null if validation passes

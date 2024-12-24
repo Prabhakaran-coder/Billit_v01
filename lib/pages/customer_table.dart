@@ -1,5 +1,6 @@
 import 'package:billit/database/product_database_helper.dart';
 import 'package:billit/models/product_db_data.dart';
+import 'package:billit/models/textOverFlow.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -28,11 +29,11 @@ class _CustomerTableState extends State<CustomerTable> {
   void _updateCustomer(int id) async {
       final String customerNameController = _customerNameController.text;
       final String customerAddressController = _customerAddressController.text;
-      final String customerContactController = _customerContactController.text;
+      final int customerContactController = int.tryParse(_customerContactController.text)??0;
       final String gstNumber = gst ? _gstController.text.trim() : "";
 
       
-      if (customerNameController.isNotEmpty && customerAddressController.isNotEmpty&& customerContactController.isNotEmpty) {
+      if (customerNameController.isNotEmpty && customerAddressController.isNotEmpty&& customerContactController>0) {
          final newCustomer = Customers(id: id,customerName: customerNameController, customerAddress: customerAddressController, customerContact: customerContactController,gst:gstNumber);
         await _databaseHelper.updateCustomers(newCustomer);
         setState(() {
@@ -114,7 +115,7 @@ class _CustomerTableState extends State<CustomerTable> {
           return Column(
             children: [
               DataTable(
-                columnSpacing: 140.0,
+                columnSpacing: 138.0,
                 headingTextStyle: TextStyle(color: Color(0xFF667085)),
                 dataTextStyle:
                     TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500),
@@ -139,7 +140,7 @@ class _CustomerTableState extends State<CustomerTable> {
                     startIndex + index,
                     currentCustomer[index].customerName,
                     currentCustomer[index].customerAddress,
-                    currentCustomer[index].customerContact,
+                    currentCustomer[index].customerContact.toString(),
                     currentCustomer[index].gst,
                     
                   ),
@@ -229,10 +230,22 @@ class _CustomerTableState extends State<CustomerTable> {
     return DataRow(
       cells: [
         DataCell(Text((index + 1).toString())),
-        DataCell(Text(customerName)),
-        DataCell(Text(customerAddress)),
-        DataCell(Text(customerContact)),
-        DataCell(Text(gst)),
+        DataCell(Tooltip(message: customerName,child: TextOverflowByChars(
+        text:customerName,
+        maxCharacters: 6,
+      ))),
+        DataCell(Tooltip(message: customerAddress,child: TextOverflowByChars(
+        text:customerAddress,
+        maxCharacters: 6,
+      ))),
+        DataCell(Tooltip(message: customerContact,child: TextOverflowByChars(
+        text:customerContact,
+        maxCharacters: 6,
+      ))),
+        DataCell(Tooltip(message: gst,child: TextOverflowByChars(
+        text:gst,
+        maxCharacters: 6,
+      ))),
         DataCell(_buildRowWithHover(context, index)),
       ],
     );
@@ -320,7 +333,7 @@ class _CustomerTableState extends State<CustomerTable> {
           {required Customers Customer, required void Function() onUpdate}) {
         _customerNameController.text = Customer.customerName;
         _customerAddressController.text = Customer.customerAddress;
-        _customerContactController.text = Customer.customerContact;
+        _customerContactController.text = Customer.customerContact.toString();
         _gstController.text = Customer.gst;
         if(Customer.gst.length>0){
 setState(() {
@@ -471,10 +484,7 @@ setState(() {
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
                                             return 'Contact can\'t be empty';
-                                          }
-                                          if (int.tryParse(value) == null) {
-                                            return 'Enter a valid number for Contact';
-                                          }
+                                          }                                          
                                           return null; // Return null if validation passes
                                         })])),
                                         SizedBox(width: 20),
