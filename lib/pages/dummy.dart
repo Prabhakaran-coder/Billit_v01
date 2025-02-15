@@ -860,6 +860,103 @@
 // }
 
 // }
+////////////////--------------------------INVOICE DATA RETRIEVE W=IN DATATABE----------------////////////////////
+// import 'package:flutter/material.dart';
+
+// class InvoiceDetailsPage extends StatelessWidget {
+//   final int invoiceId;
+
+//   InvoiceDetailsPage({required this.invoiceId});
+
+//   Future<Map<String, dynamic>> fetchInvoice(int invoiceId) async {
+//     final dbHelper = DatabaseHelper();
+
+//     // Fetch the invoice header
+//     InvoiceHeader? header = await dbHelper.getInvoiceHeader(invoiceId);
+
+//     // Fetch the invoice details
+//     List<InvoiceDetail> details = await dbHelper.getInvoiceDetails(invoiceId);
+
+//     return {
+//       'header': header,
+//       'details': details,
+//     };
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Invoice Details'),
+//       ),
+//       body: FutureBuilder<Map<String, dynamic>>(
+//         future: fetchInvoice(invoiceId), // Fetch invoice data
+//         builder: (context, snapshot) {
+//           if (snapshot.connectionState == ConnectionState.waiting) {
+//             return Center(child: CircularProgressIndicator());
+//           } else if (snapshot.hasError) {
+//             return Center(child: Text('Error: ${snapshot.error}'));
+//           } else if (!snapshot.hasData || snapshot.data == null) {
+//             return Center(child: Text('No data found for this invoice.'));
+//           }
+
+//           final invoiceHeader = snapshot.data!['header'] as InvoiceHeader?;
+//           final invoiceDetails = snapshot.data!['details'] as List<InvoiceDetail>;
+
+//           if (invoiceHeader == null) {
+//             return Center(child: Text('Invoice not found.'));
+//           }
+
+//           return Padding(
+//             padding: const EdgeInsets.all(16.0),
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 // Display Invoice Header
+//                 Text('Customer: ${invoiceHeader.customerName}', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+//                 SizedBox(height: 8),
+//                 Text('Subtotal: ${invoiceHeader.subtotal}', style: TextStyle(fontSize: 16)),
+//                 Text('CGST: ${invoiceHeader.cgst}', style: TextStyle(fontSize: 16)),
+//                 Text('SGST: ${invoiceHeader.sgst}', style: TextStyle(fontSize: 16)),
+//                 Text('Total Amount: ${invoiceHeader.totalAmount}', style: TextStyle(fontSize: 16)),
+//                 SizedBox(height: 16),
+
+//                 // Display Invoice Details in a DataTable
+//                 Expanded(
+//                   child: SingleChildScrollView(
+//                     scrollDirection: Axis.vertical,
+//                     child: DataTable(
+//                       columns: const [
+//                         DataColumn(label: Text('No')),
+//                         DataColumn(label: Text('Product')),
+//                         DataColumn(label: Text('Quantity')),
+//                         DataColumn(label: Text('Price')),
+//                         DataColumn(label: Text('Amount')),
+//                       ],
+//                       rows: List<DataRow>.generate(
+//                         invoiceDetails.length,
+//                         (index) {
+//                           final detail = invoiceDetails[index];
+//                           return DataRow(cells: [
+//                             DataCell(Text((index + 1).toString())), // Serial number
+//                             DataCell(Text(detail.productName)),
+//                             DataCell(Text(detail.quantity.toString())),
+//                             DataCell(Text(detail.price.toString())),
+//                             DataCell(Text(detail.amount.toString())),
+//                           ]);
+//                         },
+//                       ),
+//                     ),
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           );
+//         },
+//       ),
+//     );
+//   }
+// }
 
 
 

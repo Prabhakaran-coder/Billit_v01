@@ -18,6 +18,8 @@ late Future<List<Product>> _products;
 final TextEditingController _itemnameController = TextEditingController();
 final TextEditingController _qtyController = TextEditingController();
 final TextEditingController _priceController = TextEditingController();
+final TextEditingController _cgstController = TextEditingController();
+final TextEditingController _sgstController = TextEditingController();
 final _formKey = GlobalKey<FormState>();
 
 class _productState extends State<product> {
@@ -32,15 +34,19 @@ class _productState extends State<product> {
     final String itemName = _itemnameController.text;
     final int qty = int.tryParse(_qtyController.text) ?? 0;
     final double price = double.tryParse(_priceController.text) ?? 0.0;
+    final int cgst = int.tryParse(_cgstController.text) ?? 0;
+    final int sgst = int.tryParse(_sgstController.text) ?? 0;
 
-    if (itemName.isNotEmpty && qty > 0 && price > 0) {
-      final newProduct = Product(itemName: itemName, qty: qty, price: price);
+    if (itemName.isNotEmpty && qty > 0 && price > 0 && cgst > 0 && sgst > 0) {
+      final newProduct = Product(itemName: itemName, qty: qty, price: price, cgst: cgst, sgst: sgst);
       var result = await _databaseHelper.insertProduct(newProduct);
       // _products=<product>[];
       setState(() {
         _products = _databaseHelper.getProduct();
       });
       print(result);
+      _cgstController.clear();
+      _sgstController.clear();
       _itemnameController.clear();
       _qtyController.clear();
       _priceController.clear();
@@ -212,6 +218,78 @@ class _productState extends State<product> {
                                         }
                                         if (double.tryParse(value) == null) {
                                           return 'Enter a valid number for price';
+                                        }
+                                        return null; // Return null if validation passes
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(width: 20,),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text('CGST',
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.w500)),
+                                    const SizedBox(height: 5),
+                                    TextFormField(
+                                      controller: _cgstController,
+                                      decoration: InputDecoration(
+                                        focusColor: Colors.green.shade600,
+                                        focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                          width: 2.0,
+                                          style: BorderStyle.solid,
+                                          color: Color(0xFF5B89FF),
+                                        )),
+                                        border: OutlineInputBorder(),
+                                        labelText: 'Enter CGST',
+                                        //errorText: validateitemname? 'Itemname cant be empty': null,
+                                      ),
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'CGST can\'t be empty';
+                                        }if (int.tryParse(value) == null) {
+                                          return 'Enter a valid value for CGST';
+                                        }
+                                        return null; // Return null if validation passes
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(width: 20,),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text('SGST',
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.w500)),
+                                    const SizedBox(height: 5),
+                                    TextFormField(
+                                      controller: _sgstController,
+                                      decoration: InputDecoration(
+                                        focusColor: Colors.green.shade600,
+                                        focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                          width: 2.0,
+                                          style: BorderStyle.solid,
+                                          color: Color(0xFF5B89FF),
+                                        )),
+                                        border: OutlineInputBorder(),
+                                        labelText: 'Enter SGST',
+                                        //errorText: validateitemname? 'Itemname cant be empty': null,
+                                      ),
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'SGST can\'t be empty';
+                                        }if (int.tryParse(value) == null) {
+                                          return 'Enter a valid value for SGST';
                                         }
                                         return null; // Return null if validation passes
                                       },

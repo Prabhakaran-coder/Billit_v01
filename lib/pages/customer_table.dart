@@ -26,20 +26,23 @@ class _CustomerTableState extends State<CustomerTable> {
   // Pagination variables
   int _currentPage = 0;
   final int _itemsPerPage = 8;
+ List<String> _customerState =['AndraPradesh','Kerala','Karnataka','Tamilnadu'];
+  String _selectedState='';
   void _updateCustomer(int id) async {
       final String customerNameController = _customerNameController.text;
       final String customerAddressController = _customerAddressController.text;
       final int customerContactController = int.tryParse(_customerContactController.text)??0;
-      final String gstNumber = gst ? _gstController.text.trim() : "";
+      final String State=_selectedState!;
+      final String gstNumber = gst ? _gstController.text.trim() : "No";
 
       
       if (customerNameController.isNotEmpty && customerAddressController.isNotEmpty&& customerContactController>0) {
-         final newCustomer = Customers(id: id,customerName: customerNameController, customerAddress: customerAddressController, customerContact: customerContactController,gst:gstNumber);
+         final newCustomer = Customers(id: id,customerName: customerNameController, customerAddress: customerAddressController, state: State,customerContact: customerContactController,gst:gstNumber);
         await _databaseHelper.updateCustomers(newCustomer);
         setState(() {
           _Customers = _databaseHelper.getCustomers();
         });
-
+      _selectedState='';
       _customerNameController.clear();
       _customerAddressController.clear();
       _customerContactController.clear();
@@ -115,7 +118,7 @@ class _CustomerTableState extends State<CustomerTable> {
           return Column(
             children: [
               DataTable(
-                columnSpacing: 138.0,
+                columnSpacing:55.0,
                 headingTextStyle: TextStyle(color: Color(0xFF667085)),
                 dataTextStyle:
                     TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500),
@@ -129,6 +132,7 @@ class _CustomerTableState extends State<CustomerTable> {
                   DataColumn(label: Text("No")),
                   DataColumn(label: Text("Customer Name")),
                   DataColumn(label: Text("Address")),
+                  DataColumn(label: Text("State")),
                   DataColumn(label: Text("Contact")),
                   DataColumn(label: Text("Gst")),
                   DataColumn(label: Text("Action")),
@@ -140,6 +144,7 @@ class _CustomerTableState extends State<CustomerTable> {
                     startIndex + index,
                     currentCustomer[index].customerName,
                     currentCustomer[index].customerAddress,
+                    currentCustomer[index].state,
                     currentCustomer[index].customerContact.toString(),
                     currentCustomer[index].gst,
                     
@@ -224,6 +229,7 @@ class _CustomerTableState extends State<CustomerTable> {
     int index,
     String customerName,
     String customerAddress,
+    String state,
     String customerContact,
     String gst,
   ) {
@@ -232,20 +238,34 @@ class _CustomerTableState extends State<CustomerTable> {
         DataCell(Text((index + 1).toString())),
         DataCell(Tooltip(message: customerName,child: TextOverflowByChars(
         text:customerName,
-        maxCharacters: 6,
-      ))),
+        fontSize: 14,
+        //maxCharactersPerLine: 15,
+        maxCharacters: 15,
+              ))),
         DataCell(Tooltip(message: customerAddress,child: TextOverflowByChars(
         text:customerAddress,
-        maxCharacters: 6,
+        fontSize: 14,
+                   // maxCharactersPerLine: 30,
+        maxCharacters: 30,
+              ))),
+      DataCell(Tooltip(message: state,child: TextOverflowByChars(
+        text:state,
+        fontSize: 14,
+        //maxCharactersPerLine: 10,
+        maxCharacters: 15,
       ))),
         DataCell(Tooltip(message: customerContact,child: TextOverflowByChars(
         text:customerContact,
-        maxCharacters: 6,
-      ))),
+        fontSize: 14,
+        //maxCharactersPerLine: 10,
+        maxCharacters: 10,
+              ))),
         DataCell(Tooltip(message: gst,child: TextOverflowByChars(
         text:gst,
-        maxCharacters: 6,
-      ))),
+        fontSize: 14,
+        //maxCharactersPerLine: 10,
+        maxCharacters: 15,
+              ))),
         DataCell(_buildRowWithHover(context, index)),
       ],
     );
@@ -334,8 +354,11 @@ class _CustomerTableState extends State<CustomerTable> {
         _customerNameController.text = Customer.customerName;
         _customerAddressController.text = Customer.customerAddress;
         _customerContactController.text = Customer.customerContact.toString();
+       setState(() {
+          _selectedState=Customer.state;
+       });
         _gstController.text = Customer.gst;
-        if(Customer.gst.length>0){
+        if(Customer.gst !="No"){
 setState(() {
             gst=true;
             });        
@@ -456,6 +479,62 @@ setState(() {
                                         })
                                         
                                         ])),
+                                      const SizedBox(width: 20),
+                                      
+                                         Expanded(
+                          flex: 1,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                             
+                              const Text('State',
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.w500)),
+                                    const SizedBox(height: 5),
+                              Theme(
+                                  data: Theme.of(context).copyWith(
+                                    canvasColor: Colors.white, // Background color of dropdown menu
+                                    shadowColor: Colors.white, 
+                                    // Removes shadow
+                                  ),
+                                child: DropdownButtonFormField(
+                                  //controller:_stateController,
+                                  focusColor: Colors.white,
+                                  decoration: const InputDecoration(
+                                    labelText: "Select State",
+                                    border: OutlineInputBorder(),
+                                    filled: true,
+                                    fillColor: Colors.white,
+                                  ),
+                                   dropdownColor: Colors.white, 
+                                  value: _selectedState,
+                                  hint: const Text('Select State'),
+                                  items: _customerState.map((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                 
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      _selectedState = newValue!;
+                                    });
+                              
+                                  },
+                                 
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'States can\'t be empty';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                                 const SizedBox(width: 20),
                                 Expanded(
                                   child: Column(

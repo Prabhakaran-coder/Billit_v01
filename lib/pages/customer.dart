@@ -19,7 +19,7 @@ class _CustomerState extends State<Customer> {
    late Future<List<Customers>> _Customers;
    late ProductDatabaseHelper _databaseHelper;
     bool gst = false;
-     
+    List<String> _customerState =['AndraPradesh','Kerala','Karnataka','Tamilnadu'];  
   @override
   void initState() {
     super.initState();
@@ -29,10 +29,11 @@ class _CustomerState extends State<Customer> {
     final String customerNameController = _customerNameController.text;
     final String customerAddressController = _customerAddressController.text ;
     final int customerContactController = int.tryParse(_customerContactController.text)??0;
-    final String gstNumber = gst ? _gstController.text.trim() : "";
+    final String state = _selectedName!;
+    final String gstNumber = gst ? _gstController.text.trim() : "No";
 
     if (customerNameController.isNotEmpty && customerAddressController.isNotEmpty&& customerContactController>0) {
-      final newCustomer = Customers(customerName: customerNameController, customerAddress: customerAddressController, customerContact: customerContactController,gst:gstNumber);
+      final newCustomer = Customers(customerName: customerNameController, customerAddress: customerAddressController,state: state, customerContact: customerContactController,gst:gstNumber);
       var result = await _databaseHelper.insertCustomers(newCustomer);
       // _products=<product>[];
       setState(() {
@@ -49,7 +50,9 @@ class _CustomerState extends State<Customer> {
    final TextEditingController _customerNameController = TextEditingController();
    final TextEditingController _customerAddressController = TextEditingController();
    final TextEditingController _customerContactController = TextEditingController();
-   final TextEditingController _gstController = TextEditingController(); 
+   final TextEditingController _gstController = TextEditingController();
+   
+     String? _selectedName; 
 
   @override
   Widget build(BuildContext context) {
@@ -192,6 +195,62 @@ void customerDialog(BuildContext context,Function addCustomer) {
                                   ],
                                 ),
                               ),
+                              const SizedBox(width: 20),
+
+                              Expanded(
+                          flex: 1,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                             
+                              const Text('State',
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.w500)),
+                                    const SizedBox(height: 5),
+                              Theme(
+                                  data: Theme.of(context).copyWith(
+                                    canvasColor: Colors.white, // Background color of dropdown menu
+                                    shadowColor: Colors.white, 
+                                    // Removes shadow
+                                  ),
+                                child: DropdownButtonFormField(
+                                  //controller:_stateController,
+                                  focusColor: Colors.white,
+                                  decoration: const InputDecoration(
+                                    labelText: "Select State",
+                                    border: OutlineInputBorder(),
+                                    filled: true,
+                                    fillColor: Colors.white,
+                                  ),
+                                   dropdownColor: Colors.white, 
+                                  value: _selectedName,
+                                  hint: const Text('Select State'),
+                                  items: _customerState.map((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                 
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      _selectedName = newValue;
+                                    });
+                              
+                                  },
+                                 
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'States can\'t be empty';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                               const SizedBox(width: 20),
                               Expanded(
                                 child: Column(

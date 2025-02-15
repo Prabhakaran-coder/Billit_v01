@@ -1,5 +1,8 @@
+import 'package:billit/models/invoiceheader.dart';
 import 'package:billit/models/menuheader.dart';
 import 'package:billit/models/providercurrentindex.dart';
+import 'package:billit/pages/addInvoice.dart';
+import 'package:billit/pages/homeinvoicetable.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,36 +16,30 @@ class Invoice extends StatefulWidget {
 class _InvoiceState extends State<Invoice> {
   @override
   Widget build(BuildContext context) {
-    void showinvoiceDialog() {
-      invoiceDialog(context); // Call the dialog here
-    }
+    // void showinvoiceDialog() {
+    //   invoiceDialog(context); // Call the dialog here
+    // }
      final menuHeader = Provider.of<MyState>(context).menuHeaderValue;
     return Scaffold(
-      body:menuHeaders(menuHeader,showinvoiceDialog)
+      body:Container(
+        decoration: BoxDecoration(color: Color(0xFFFAFAFA)),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              InvoicemenuHeaders(menuHeader,context),
+               SizedBox(
+                height: 20.0,
+              ),
+              homeinvoicetable(),
+            ],
+          ),
+        ),
+      )
     );
   }
 }
 
-Future<void> invoiceDialog(BuildContext context) async {
-    return showDialog(
-      context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            backgroundColor: Colors.white,
-            title: Text("Add Invoice", style: TextStyle(color: Colors.black)),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: [
-                  Text("Invoice"),
-                  TextField(),
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(onPressed: (){
-                Navigator.of(context).pop();
-              }, child: Text("Save")),
-            ],
-          );
-        });
-  }
+
+
+

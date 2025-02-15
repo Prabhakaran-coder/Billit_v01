@@ -15,6 +15,8 @@ class _ProductTableState extends State<ProductTable> {
   final TextEditingController _itemnameController = TextEditingController();
   final TextEditingController _qtyController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _cgstController = TextEditingController();
+final TextEditingController _sgstController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   late Future<List<Product>> _products;
@@ -27,15 +29,17 @@ class _ProductTableState extends State<ProductTable> {
       final String itemName = _itemnameController.text;
       final int qty = int.tryParse(_qtyController.text) ?? 0;
       final double price = double.tryParse(_priceController.text) ?? 0.0;
+      final int cgst = int.tryParse(_cgstController.text) ?? 0;
+      final int sgst = int.tryParse(_sgstController.text) ?? 0;
 
-      if (itemName.isNotEmpty && qty > 0 && price > 0) {
-        final updatedProduct =
-            Product(id: id, itemName: itemName, qty: qty, price: price);
+       if (itemName.isNotEmpty && qty > 0 && price > 0 && cgst > 0 && sgst > 0) {
+      final updatedProduct = Product(itemName: itemName, qty: qty, price: price, cgst: cgst, sgst: sgst);
         await _databaseHelper.updateProduct(updatedProduct);
         setState(() {
           _products = _databaseHelper.getProduct();
         });
-
+        _cgstController.clear();
+        _sgstController.clear();
         _itemnameController.clear();
         _qtyController.clear();
         _priceController.clear();
@@ -110,7 +114,7 @@ class _ProductTableState extends State<ProductTable> {
           return Column(
             children: [
               DataTable(
-                columnSpacing: 188.0,
+                columnSpacing: 110.0,
                 headingTextStyle: TextStyle(color: Color(0xFF667085)),
                 dataTextStyle:
                     TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500),
@@ -125,6 +129,8 @@ class _ProductTableState extends State<ProductTable> {
                   DataColumn(label: Text("Product Name")),
                   DataColumn(label: Text("Quantity")),
                   DataColumn(label: Text("Price")),
+                  DataColumn(label: Text("CGST")),
+                  DataColumn(label: Text("SGST")),
                   DataColumn(label: Text("Action")),
                 ],
                 rows: List.generate(
@@ -135,6 +141,8 @@ class _ProductTableState extends State<ProductTable> {
                     currentProducts[index].itemName,
                     currentProducts[index].qty.toString(),
                     currentProducts[index].price.toString(),
+                    currentProducts[index].cgst.toString(),
+                    currentProducts[index].sgst.toString(),
                   ),
                 ),
               ),
@@ -216,22 +224,73 @@ class _ProductTableState extends State<ProductTable> {
     String productName,
     String qty,
     String price,
+    String cgst,
+    String sgst,
   ) {
     return DataRow(
       cells: [
         DataCell(Text((index + 1).toString())),
-        DataCell(Tooltip(message: productName,child: TextOverflowByChars(
-        text:productName,
-        maxCharacters: 5,
-      ))),
-         DataCell(Tooltip(message: productName,child: TextOverflowByChars(
-        text:qty,
-        maxCharacters: 5,
-      ))),
-         DataCell(Tooltip(message: productName,child: TextOverflowByChars(
-        text:price,
-        maxCharacters: 5,
-      ))),
+        DataCell(Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Tooltip(message: productName,child: TextOverflowByChars(
+            text:productName,
+            fontSize: 14,
+            //maxCharactersPerLine: 10,
+            maxCharacters: 5,
+                  )),
+          ],
+        )),
+         DataCell(Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+           children: [
+            
+             Tooltip(message: qty,child: TextOverflowByChars(
+                     text:qty,
+                     fontSize: 14,
+                     //maxCharactersPerLine: 10,
+                     maxCharacters: 5,
+                   )),
+           ],
+         )),
+         DataCell(Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+           children: [
+             Tooltip(message: price,child: TextOverflowByChars(
+                     text:price,
+                     fontSize: 14,
+                     //maxCharactersPerLine: 10,
+                     maxCharacters: 5,
+                   )),
+           ],
+         )),
+       DataCell(Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+         children: [
+           Tooltip(message: cgst,child: TextOverflowByChars(
+            text:cgst,
+            fontSize: 14,
+            //maxCharactersPerLine: 10,
+            maxCharacters: 5,
+                 )),
+         ],
+       )),
+       DataCell(Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+         children: [
+           Tooltip(message: sgst,child: TextOverflowByChars(
+            text:sgst,
+            fontSize: 14,
+            //maxCharactersPerLine: 10,
+            maxCharacters: 5,
+                 )),
+         ],
+       )),
         DataCell(_buildRowWithHover(context, index)),
       ],
     );
@@ -320,6 +379,8 @@ class _ProductTableState extends State<ProductTable> {
         _itemnameController.text = product.itemName;
         _qtyController.text = product.qty.toString();
         _priceController.text = product.price.toString();
+        _cgstController.text=product.cgst.toString();
+        _sgstController.text=product.sgst.toString();
         showDialog(
           barrierDismissible: false,
         context: context,
@@ -441,11 +502,86 @@ class _ProductTableState extends State<ProductTable> {
                                         if (value == null || value.isEmpty) {
                                           return 'Price can\'t be empty';
                                         }
-                                        if (int.tryParse(value) == null) {
+                                        if (double.tryParse(value) == null) {
                                           return 'Enter a valid number for price';
                                         }
                                         return null; // Return null if validation passes
-                                      })]))]),
+                                      })])
+                                      ),
+                                      SizedBox(width: 20,),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text('CGST',
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.w500)),
+                                    const SizedBox(height: 5),
+                                    TextFormField(
+                                      controller: _cgstController,
+                                      decoration: InputDecoration(
+                                        focusColor: Colors.green.shade600,
+                                        focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                          width: 2.0,
+                                          style: BorderStyle.solid,
+                                          color: Color(0xFF5B89FF),
+                                        )),
+                                        border: OutlineInputBorder(),
+                                        labelText: 'Enter CGST',
+                                        //errorText: validateitemname? 'Itemname cant be empty': null,
+                                      ),
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'CGST can\'t be empty';
+                                        }if (int.tryParse(value) == null) {
+                                          return 'Enter a valid value for CGST';
+                                        }
+                                        return null; // Return null if validation passes
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(width: 20,),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text('SGST',
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.w500)),
+                                    const SizedBox(height: 5),
+                                    TextFormField(
+                                      controller: _sgstController,
+                                      decoration: InputDecoration(
+                                        focusColor: Colors.green.shade600,
+                                        focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                          width: 2.0,
+                                          style: BorderStyle.solid,
+                                          color: Color(0xFF5B89FF),
+                                        )),
+                                        border: OutlineInputBorder(),
+                                        labelText: 'Enter SGST',
+                                        //errorText: validateitemname? 'Itemname cant be empty': null,
+                                      ),
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'SGST can\'t be empty';
+                                        }if (int.tryParse(value) == null) {
+                                          return 'Enter a valid value for SGST';
+                                        }
+                                        return null; // Return null if validation passes
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                                      ]
+                                      ),
                           const SizedBox(height: 40),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
