@@ -39,10 +39,24 @@ dependencies:
   provider: ^6.1.2
   path_provider: ^2.1.5
   sqflite: ^2.4.1
-  sqflite_common_ffi: ^2.3.4+3
+  sqflite_common_ffi: ^2.3.0
   intl: ^0.20.1
   pdf: ^3.11.1
   printing: ^5.13.4
+  google_fonts: ^6.2.1
+  path: ^1.8.2
+  firebase_core: ^4.2.0
+  cloud_firestore: ^6.0.3
+  connectivity_plus: ^7.0.0
+  firebase_auth: ^6.1.1
+  http: ^1.5.0
+  firebase_storage: ^13.0.3
+  fluttertoast: ^9.0.0
+  csv: ^6.0.0
+  uuid: ^4.5.1
+  qr_flutter: ^4.1.0
+  fl_chart: ^1.1.1
+
   
   
 dev_dependencies:
@@ -54,7 +68,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -71,6 +85,8 @@ flutter:
   assets:
     - assets/icons/
     - assets/images/profile.png
+    - assets/Images/
+    - assets/fonts/NotoSans-Regular.ttf
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -105,6 +121,7 @@ flutter:
           weight: 800
         - asset: assets/fonts/Inter_28pt-Black.ttf
           weight: 900
+        
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

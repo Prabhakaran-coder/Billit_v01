@@ -18,17 +18,17 @@ import 'package:flutter/material.dart';
                 foregroundColor: WidgetStateProperty.resolveWith<Color>(
                   (Set<WidgetState> states) {
                     if (states.contains(WidgetState.hovered)) {
-                      return Color(0xFFFFFFFF); // Hover color
+                      return Color(0xFFFFFFFF); 
                     }
-                    return Color(0xFFFFFFFF); // Default color (no hover)
+                    return Color(0xFFFFFFFF); 
                   },
                 ),
                 overlayColor: WidgetStateProperty.resolveWith<Color>(
                   (Set<WidgetState> states) {
                     if (states.contains(WidgetState.hovered)) {
-                      return Color(0xFF5B89FF); // Hover color
+                      return Color(0xFF5B89FF); 
                     }
-                    return Color(0xFF000000); // Default color (no hover)
+                    return Color(0xFF000000); 
                   },
                 ),
                 backgroundColor: WidgetStateProperty.all(Colors.black),

@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "84972958633",
+    "firebase_url": "https://billit-62fe4-default-rtdb.firebaseio.com",
+    "project_id": "billit-62fe4",
+    "storage_bucket": "billit-62fe4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:84972958633:android:4f44614365203d2476cab8",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_dJaLBMDZqN_yLeEKDfdWmYhzNRHiC-w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

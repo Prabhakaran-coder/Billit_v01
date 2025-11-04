@@ -21,3 +21,7 @@ List<Widget> pages=[
 ];
 }
 
+// class dashboardMenus{
+//   List menu = ["Total Invoices", "Paid Invoices", "Pending Invoices", "No.of Customers"];
+// }
+

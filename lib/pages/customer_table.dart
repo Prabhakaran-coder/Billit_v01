@@ -12,11 +12,17 @@ class CustomerTable extends StatefulWidget {
 }
 
 class _CustomerTableState extends State<CustomerTable> {
+  final nameExp = RegExp(r'^[a-zA-Z ]+$');
+      final stateExp = RegExp(r'^[a-zA-Z]+$');
+      final alphanumericNoSpace = RegExp(r'^[a-zA-Z0-9]+$');
   bool gst = false;
   late ProductDatabaseHelper _databaseHelper;
   final TextEditingController _customerNameController = TextEditingController();
     final TextEditingController _customerAddressController = TextEditingController();
     final TextEditingController _customerContactController = TextEditingController();
+     final TextEditingController _emailContactController = TextEditingController();
+     final TextEditingController _districtController = TextEditingController();
+    final TextEditingController _customerPincodeController = TextEditingController();
     final TextEditingController _gstController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
@@ -26,18 +32,24 @@ class _CustomerTableState extends State<CustomerTable> {
   // Pagination variables
   int _currentPage = 0;
   final int _itemsPerPage = 8;
- List<String> _customerState =['AndraPradesh','Kerala','Karnataka','Tamilnadu'];
+ final List<String> _customerState =['AndraPradesh','Kerala','Karnataka','Tamilnadu'];
   String _selectedState='';
   void _updateCustomer(int id) async {
       final String customerNameController = _customerNameController.text;
       final String customerAddressController = _customerAddressController.text;
+       final String DistrictController = _districtController.text ;
       final int customerContactController = int.tryParse(_customerContactController.text)??0;
-      final String State=_selectedState!;
-      final String gstNumber = gst ? _gstController.text.trim() : "No";
+     final String emailContactController = _emailContactController.text ;
+      final int customerPincodeController = int.tryParse(_customerPincodeController.text)??0;
+      final String State=_selectedState;
+      final String gstNumber = gst ? _gstController.text.trim().toUpperCase() : "No";
 
       
       if (customerNameController.isNotEmpty && customerAddressController.isNotEmpty&& customerContactController>0) {
-         final newCustomer = Customers(id: id,customerName: customerNameController, customerAddress: customerAddressController, state: State,customerContact: customerContactController,gst:gstNumber);
+         final newCustomer = Customers(id: id,customerName: customerNameController, customerAddress: customerAddressController, 
+         state: State,district: DistrictController,
+         customerContact: customerContactController,customeremailContact: emailContactController,
+         gst:gstNumber,customerPincode: customerPincodeController);
         await _databaseHelper.updateCustomers(newCustomer);
         setState(() {
           _Customers = _databaseHelper.getCustomers();
@@ -76,6 +88,7 @@ class _CustomerTableState extends State<CustomerTable> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(10.0),
@@ -118,14 +131,15 @@ class _CustomerTableState extends State<CustomerTable> {
           return Column(
             children: [
               DataTable(
-                columnSpacing:55.0,
-                headingTextStyle: TextStyle(color: Color(0xFF667085)),
+                columnSpacing:38.0,
+                headingTextStyle: TextStyle(color: Color.fromARGB(255, 86, 85, 85)),
+                headingRowHeight: 40,
                 dataTextStyle:
                     TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500),
                 dividerThickness: 0.4,
                 headingRowColor: WidgetStateProperty.resolveWith<Color?>(
                   (Set<WidgetState> states) {
-                    return Color(0xFFF0F1F3);
+                    return Color.fromARGB(54, 126, 161, 250);
                   },
                 ),
                 columns: [
@@ -133,7 +147,8 @@ class _CustomerTableState extends State<CustomerTable> {
                   DataColumn(label: Text("Customer Name")),
                   DataColumn(label: Text("Address")),
                   DataColumn(label: Text("State")),
-                  DataColumn(label: Text("Contact")),
+                  DataColumn(label: Text("District")),
+                  DataColumn(label: Text("Contact")),                  
                   DataColumn(label: Text("Gst")),
                   DataColumn(label: Text("Action")),
                 ],
@@ -145,6 +160,7 @@ class _CustomerTableState extends State<CustomerTable> {
                     currentCustomer[index].customerName,
                     currentCustomer[index].customerAddress,
                     currentCustomer[index].state,
+                    currentCustomer[index].district,
                     currentCustomer[index].customerContact.toString(),
                     currentCustomer[index].gst,
                     
@@ -229,6 +245,7 @@ class _CustomerTableState extends State<CustomerTable> {
     int index,
     String customerName,
     String customerAddress,
+    String district,
     String state,
     String customerContact,
     String gst,
@@ -248,6 +265,12 @@ class _CustomerTableState extends State<CustomerTable> {
                    // maxCharactersPerLine: 30,
         maxCharacters: 30,
               ))),
+              DataCell(Tooltip(message: district,child: TextOverflowByChars(
+        text:district,
+        fontSize: 14,
+        //maxCharactersPerLine: 10,
+        maxCharacters: 15,
+      ))),
       DataCell(Tooltip(message: state,child: TextOverflowByChars(
         text:state,
         fontSize: 14,
@@ -353,6 +376,7 @@ class _CustomerTableState extends State<CustomerTable> {
           {required Customers Customer, required void Function() onUpdate}) {
         _customerNameController.text = Customer.customerName;
         _customerAddressController.text = Customer.customerAddress;
+        _districtController.text=Customer.district;
         _customerContactController.text = Customer.customerContact.toString();
        setState(() {
           _selectedState=Customer.state;
@@ -445,6 +469,9 @@ setState(() {
                                           if (value == null || value.isEmpty) {
                                             return 'Customer name can\'t be empty';
                                           }
+                                           if (!nameExp.hasMatch(value)) {
+                                          return 'Please enter only letters for the name';
+                                        }
                                           return null;})])),
                                 const SizedBox(
                                     width: 20),                       
@@ -475,10 +502,45 @@ setState(() {
                                           if (value == null || value.isEmpty) {
                                             return 'Address can\'t be empty';
                                           }                                        
-                                          return null; // Return null if validation passes
-                                        })
-                                        
+                                          return null; 
+                                        })                                        
                                         ])),
+                                          const SizedBox(width: 20),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text('District',
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.w500)),
+                                    const SizedBox(height: 5),
+                                    TextFormField(
+                                      controller: _districtController,
+                                      decoration: InputDecoration(
+                                        focusColor: Colors.green.shade600,
+                                        focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                          width: 2.0,
+                                          style: BorderStyle.solid,
+                                          color: Color(0xFF5B89FF),
+                                        )),
+                                        border: OutlineInputBorder(),
+                                        labelText: 'Enter Your District',
+                                      ),
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'District can\'t be empty';
+                                        }
+                                        if (!stateExp.hasMatch(value)) {
+                                          return 'Please enter only letters for the name';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
                                       const SizedBox(width: 20),
                                       
                                          Expanded(
@@ -494,9 +556,8 @@ setState(() {
                                     const SizedBox(height: 5),
                               Theme(
                                   data: Theme.of(context).copyWith(
-                                    canvasColor: Colors.white, // Background color of dropdown menu
-                                    shadowColor: Colors.white, 
-                                    // Removes shadow
+                                    canvasColor: Colors.white, 
+                                    shadowColor: Colors.white,                                    
                                   ),
                                 child: DropdownButtonFormField(
                                   //controller:_stateController,
@@ -563,9 +624,49 @@ setState(() {
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
                                             return 'Contact can\'t be empty';
-                                          }                                          
+                                          }
+                                          if (int.tryParse(value) == null|| value.length>10) {
+                                          return 'Enter a valid number for Contact';
+                                        }                                          
                                           return null; // Return null if validation passes
                                         })])),
+
+                                        const SizedBox(width: 20),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text('Email contact',
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.w500)),
+                                    const SizedBox(height: 5),
+                                    TextFormField(
+                                      controller: _emailContactController,
+                                      decoration: InputDecoration(
+                                        focusColor: Color(0xFF1EB386),
+                                        focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                          width: 2.0,
+                                          style: BorderStyle.solid,
+                                          color: Color(0xFF5B89FF),
+                                        )),
+                                        border: OutlineInputBorder(),
+                                        labelText: 'Enter email Contact',
+                                      ),
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'email can\'t be empty';
+                                        }
+                                        if ((value) == null) {
+                                          return 'Enter a valid email for Contact';
+                                        }  
+                                        return null;
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
                                         SizedBox(width: 20),
                                         Gst(gst, _gstController),                                      
                                         ]),
@@ -591,10 +692,10 @@ setState(() {
                                           if (states
                                               .contains(WidgetState.hovered)) {
                                             return Color(
-                                                0xFFFFFFFF); // Hover color
+                                                0xFFFFFFFF); 
                                           }
                                           return Color(
-                                              0xFFFFFFFF); // Default color (no hover)
+                                              0xFFFFFFFF); 
                                         }),
                                       overlayColor:
                                           WidgetStateProperty.resolveWith<Color>(
@@ -602,10 +703,10 @@ setState(() {
                                           if (states
                                               .contains(WidgetState.hovered)) {
                                             return Color(
-                                                0xFF1EB386); // Hover color
+                                                0xFF1EB386); 
                                           }
                                           return Color(
-                                              0xFF1EB386); // Default color (no hover)
+                                              0xFF1EB386); 
                                         }),
                                       backgroundColor: WidgetStateProperty.all(
                                           Color(0xFF1EB386)),
@@ -623,10 +724,10 @@ setState(() {
                                           if (states
                                               .contains(WidgetState.hovered)) {
                                             return Color(
-                                                0xFFFFFFFF); // Hover color
+                                                0xFFFFFFFF); 
                                           }
                                           return Color(
-                                              0xFFFFFFFF); // Default color (no hover)
+                                              0xFFFFFFFF); 
                                         }),
                                       overlayColor:
                                           WidgetStateProperty.resolveWith<Color>(
@@ -634,10 +735,10 @@ setState(() {
                                           if (states
                                               .contains(WidgetState.hovered)) {
                                             return Color(
-                                                0xFF5B89FF); // Hover color
+                                                0xFF5B89FF); 
                                           }
                                           return Color(
-                                              0xFF5B89FF); // Default color (no hover)
+                                              0xFF5B89FF); 
                                         }),
                                       backgroundColor: WidgetStateProperty.all(
                                           Color(0xFF5B89FF)),
@@ -662,41 +763,39 @@ void _showDeleteDialog({required Customers Customers}) {
         content: Text("Do you wish to delete this record?",style: TextStyle(fontWeight: FontWeight.w500),),
         actions: [
           TextButton(
-            onPressed: () {
-              // Perform the delete action
+            onPressed: () {              
               _deleteCustomers(Customers.id!);
-              Navigator.of(context).pop(); // Close the dialog after deletion
+              Navigator.of(context).pop(); 
             },
             style: TextButton.styleFrom(
-            foregroundColor: Colors.white, // Text color
-            backgroundColor: Colors.green.shade500, // Background color
+            foregroundColor: Colors.white, 
+            backgroundColor: Colors.green.shade500, 
             shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0), // Optional: Rounded corners
+            borderRadius: BorderRadius.circular(8.0), 
     ),
   ).copyWith(
     overlayColor: WidgetStateProperty.resolveWith<Color?>((states) {
       if (states.contains(WidgetState.hovered)) {
-        return Colors.white.withOpacity(0.2); // Hover color with slight transparency
+        return Colors.white.withOpacity(0.2); 
       }
       return null; // Default state
     }),),
             child: Text("Yes"),
           ),
           TextButton(
-            onPressed: () {
-              // Close the dialog without deleting
+            onPressed: () {             
               Navigator.of(context).pop();
             },
             style: TextButton.styleFrom(
-            foregroundColor: Colors.white, // Text color
-            backgroundColor: Colors.blue, // Background color
+            foregroundColor: Colors.white, 
+            backgroundColor: Colors.blue, 
             shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(6.0), // Optional: Rounded corners
+            borderRadius: BorderRadius.circular(6.0), 
     ),
   ).copyWith(
     overlayColor: WidgetStateProperty.resolveWith<Color?>((states) {
       if (states.contains(WidgetState.hovered)) {
-        return Colors.white.withOpacity(0.2); // Hover color with slight transparency
+        return Colors.white.withOpacity(0.2); 
       }
       return null; // Default state
     }),),
@@ -704,7 +803,7 @@ void _showDeleteDialog({required Customers Customers}) {
           )]);});
 }
 
-Widget Gst(bool gst, TextEditingController _gstController) {
+Widget Gst(bool gst, TextEditingController gstController) {
   if (gst == true) {
     return Expanded(
       child: Column(
@@ -719,7 +818,7 @@ Widget Gst(bool gst, TextEditingController _gstController) {
           ),
           const SizedBox(height: 5),
           TextFormField(
-            controller: _gstController,
+            controller: gstController,
             decoration: InputDecoration(
               focusColor: Color(0xFF1EB386),
               focusedBorder: OutlineInputBorder(

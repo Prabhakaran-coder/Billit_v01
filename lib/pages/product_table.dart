@@ -115,13 +115,14 @@ final TextEditingController _sgstController = TextEditingController();
             children: [
               DataTable(
                 columnSpacing: 110.0,
-                headingTextStyle: TextStyle(color: Color(0xFF667085)),
+               headingTextStyle: TextStyle(color: Color.fromARGB(255, 86, 85, 85)),
+                headingRowHeight: 40,
                 dataTextStyle:
                     TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500),
                 dividerThickness: 0.4,
                 headingRowColor: WidgetStateProperty.resolveWith<Color?>(
                   (Set<WidgetState> states) {
-                    return Color(0xFFF0F1F3);
+                    return Color.fromARGB(54, 126, 161, 250);
                   },
                 ),
                 columns: [
@@ -162,17 +163,17 @@ final TextEditingController _sgstController = TextEditingController();
                 foregroundColor: WidgetStateProperty.resolveWith<Color>(
                   (Set<WidgetState> states) {
                     if (states.contains(WidgetState.hovered)) {
-                      return Color(0xFFFFFFFF); // Hover color
+                      return Color(0xFFFFFFFF); 
                     }
-                    return Color(0xFFFFFFFF); // Default color (no hover)
+                    return Color(0xFFFFFFFF); 
                   },
                 ),
                 overlayColor: WidgetStateProperty.resolveWith<Color>(
                   (Set<WidgetState> states) {
                     if (states.contains(WidgetState.hovered)) {
-                     return Color.fromARGB(255, 215, 132, 59); // Hover color
+                     return Color.fromARGB(255, 215, 132, 59); 
                     }
-                    return Color.fromARGB(255, 255, 254, 254); // Default color (no hover)
+                    return Color.fromARGB(255, 255, 254, 254); 
                   },
                 ),
                 backgroundColor: WidgetStateProperty.all(Colors.black),
@@ -192,17 +193,17 @@ final TextEditingController _sgstController = TextEditingController();
                 foregroundColor: WidgetStateProperty.resolveWith<Color>(
                   (Set<WidgetState> states) {
                     if (states.contains(WidgetState.hovered)) {
-                      return Color(0xFFFFFFFF); // Hover color
+                      return Color(0xFFFFFFFF); 
                     }
-                    return Color(0xFFFFFFFF); // Default color (no hover)
+                    return Color(0xFFFFFFFF); 
                   },
                 ),
                 overlayColor: WidgetStateProperty.resolveWith<Color>(
                   (Set<WidgetState> states) {
                     if (states.contains(WidgetState.hovered)) {
-                      return Color.fromARGB(255, 215, 132, 59); // Hover color
+                      return Color.fromARGB(255, 215, 132, 59); 
                     }
-                    return Color.fromARGB(255, 255, 255, 255); // Default color (no hover)
+                    return Color.fromARGB(255, 255, 255, 255); 
                   },
                 ),
                 backgroundColor: WidgetStateProperty.all(Colors.black),
@@ -307,7 +308,7 @@ final TextEditingController _sgstController = TextEditingController();
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(3),
-              color: const Color.fromARGB(255, 145, 249, 149),
+              color: const Color.fromARGB(255, 193, 247, 195),
             ),
             padding: EdgeInsets.all(10.0),
             child: Row(
@@ -388,14 +389,14 @@ final TextEditingController _sgstController = TextEditingController();
         return Dialog(
           shape: RoundedRectangleBorder(
             borderRadius:
-                BorderRadius.circular(10), // Optional: adds rounded corners
+                BorderRadius.circular(10), 
           ),
           child: AnimatedOpacity(
             opacity: 1.0,
             duration: Duration(seconds: 50),
             child: Container(
-              width: double.infinity, // Set custom width
-              height: 350, // Set custom height
+              width: double.infinity, 
+              height: 350, 
               padding: const EdgeInsets.all(40),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -471,7 +472,7 @@ final TextEditingController _sgstController = TextEditingController();
                                         if (int.tryParse(value) == null) {
                                           return 'Enter a valid number for quantity';
                                         }
-                                        return null; // Return null if validation passes
+                                        return null; 
                                       })])),
                               const SizedBox(width: 20),
                               Expanded(
@@ -505,7 +506,7 @@ final TextEditingController _sgstController = TextEditingController();
                                         if (double.tryParse(value) == null) {
                                           return 'Enter a valid number for price';
                                         }
-                                        return null; // Return null if validation passes
+                                        return null; 
                                       })])
                                       ),
                                       SizedBox(width: 20,),
@@ -538,7 +539,7 @@ final TextEditingController _sgstController = TextEditingController();
                                         }if (int.tryParse(value) == null) {
                                           return 'Enter a valid value for CGST';
                                         }
-                                        return null; // Return null if validation passes
+                                        return null; 
                                       },
                                     ),
                                   ],
@@ -574,7 +575,7 @@ final TextEditingController _sgstController = TextEditingController();
                                         }if (int.tryParse(value) == null) {
                                           return 'Enter a valid value for SGST';
                                         }
-                                        return null; // Return null if validation passes
+                                        return null; 
                                       },
                                     ),
                                   ],
@@ -602,10 +603,10 @@ final TextEditingController _sgstController = TextEditingController();
                                         if (states
                                             .contains(WidgetState.hovered)) {
                                           return Color(
-                                              0xFFFFFFFF); // Hover color
+                                              0xFFFFFFFF); 
                                         }
                                         return Color(
-                                            0xFFFFFFFF); // Default color (no hover)
+                                            0xFFFFFFFF); 
                                       }),
                                     overlayColor:
                                         WidgetStateProperty.resolveWith<Color>(
@@ -613,10 +614,10 @@ final TextEditingController _sgstController = TextEditingController();
                                         if (states
                                             .contains(WidgetState.hovered)) {
                                           return Color(
-                                              0xFF1EB386); // Hover color
+                                              0xFF1EB386); 
                                         }
                                         return Color(
-                                            0xFF1EB386); // Default color (no hover)
+                                            0xFF1EB386); 
                                       }),
                                     backgroundColor: WidgetStateProperty.all(
                                         Color(0xFF1EB386)),
@@ -634,10 +635,10 @@ final TextEditingController _sgstController = TextEditingController();
                                         if (states
                                             .contains(WidgetState.hovered)) {
                                           return Color(
-                                              0xFFFFFFFF); // Hover color
+                                              0xFFFFFFFF); 
                                         }
                                         return Color(
-                                            0xFFFFFFFF); // Default color (no hover)
+                                            0xFFFFFFFF); 
                                       }),
                                     overlayColor:
                                         WidgetStateProperty.resolveWith<Color>(
@@ -645,10 +646,10 @@ final TextEditingController _sgstController = TextEditingController();
                                         if (states
                                             .contains(WidgetState.hovered)) {
                                           return Color(
-                                              0xFF5B89FF); // Hover color
+                                              0xFF5B89FF); 
                                         }
                                         return Color(
-                                            0xFF5B89FF); // Default color (no hover)
+                                            0xFF5B89FF); 
                                       }),
                                     backgroundColor: WidgetStateProperty.all(
                                         Color(0xFF5B89FF)),
@@ -669,18 +670,18 @@ void _showDeleteDialog({required Product product}) {
             onPressed: () {
               // Perform the delete action
               _deleteProduct(product.id!);
-              Navigator.of(context).pop(); // Close the dialog after deletion
+              Navigator.of(context).pop(); 
             },
             style: TextButton.styleFrom(
-            foregroundColor: Colors.white, // Text color
-            backgroundColor: Colors.green.shade500, // Background color
+            foregroundColor: Colors.white, 
+            backgroundColor: Colors.green.shade500, 
             shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0), // Optional: Rounded corners
+            borderRadius: BorderRadius.circular(8.0), 
     ),
   ).copyWith(
     overlayColor: WidgetStateProperty.resolveWith<Color?>((states) {
       if (states.contains(WidgetState.hovered)) {
-        return Colors.white.withOpacity(0.2); // Hover color with slight transparency
+        return Colors.white.withOpacity(0.2); 
       }
       return null; // Default state
     }),),
@@ -688,19 +689,19 @@ void _showDeleteDialog({required Product product}) {
           ),
           TextButton(
             onPressed: () {
-              // Close the dialog without deleting
+             
               Navigator.of(context).pop();
             },
             style: TextButton.styleFrom(
-            foregroundColor: Colors.white, // Text color
-            backgroundColor: Colors.blue, // Background color
+            foregroundColor: Colors.white, 
+            backgroundColor: Colors.blue, 
             shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(6.0), // Optional: Rounded corners
+            borderRadius: BorderRadius.circular(6.0),
     ),
   ).copyWith(
     overlayColor: WidgetStateProperty.resolveWith<Color?>((states) {
       if (states.contains(WidgetState.hovered)) {
-        return Colors.white.withOpacity(0.2); // Hover color with slight transparency
+        return Colors.white.withOpacity(0.2); 
       }
       return null; // Default state
     }),),
@@ -714,12 +715,12 @@ class TextOverflowByWords extends StatelessWidget {
   final String text;
   final int maxWords;
 
-  TextOverflowByWords({required this.text, required this.maxWords});
+  const TextOverflowByWords({super.key, required this.text, required this.maxWords});
 
   String _truncateText() {
     List<String> words = text.split(' ');
     if (words.length > maxWords) {
-      return words.sublist(0, maxWords).join(' ') + '...';
+      return '${words.sublist(0, maxWords).join(' ')}...';
     } else {
       return text;
     }
@@ -729,7 +730,7 @@ class TextOverflowByWords extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       _truncateText(),
-      overflow: TextOverflow.ellipsis,  // Optional, if you want a "..." for visual overflow
+      overflow: TextOverflow.ellipsis, 
       style: TextStyle(fontSize: 16),
     );
   }

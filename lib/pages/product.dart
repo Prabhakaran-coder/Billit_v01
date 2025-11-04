@@ -56,14 +56,13 @@ class _productState extends State<product> {
   @override
   Widget build(BuildContext context) {
     void showProductDialog() {
-      showCustomDialog(context, _addProduct); // Call the dialog here
+      showCustomDialog(context, _addProduct);
     }
 
-    //  final dialogmethod=productDialog(context);
     final menuHeader = Provider.of<MyState>(context).menuHeaderValue;
     return Scaffold(
         body: Container(
-      decoration: BoxDecoration(color: Color(0xFFFAFAFA)),
+      decoration: BoxDecoration(color: Color.fromARGB(255, 241, 242, 245)),
       child: Padding(
           padding: EdgeInsets.all(10.0),
           child: Column(
@@ -86,14 +85,14 @@ class _productState extends State<product> {
         return Dialog(
           shape: RoundedRectangleBorder(
             borderRadius:
-                BorderRadius.circular(10), // Optional: adds rounded corners
+                BorderRadius.circular(10), 
           ),
           child: AnimatedOpacity(
             opacity: 1.0,
             duration: Duration(seconds: 50),
             child: Container(
-              width: double.infinity, // Set custom width
-              height: 350, // Set custom height
+              width: double.infinity, 
+              height: 350, 
               padding: const EdgeInsets.all(40),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,11 +106,11 @@ class _productState extends State<product> {
                                   fontSize: 20, fontWeight: FontWeight.w500)),
                           Divider(),
                           const SizedBox(height: 20),
-                          // Row for horizontal input fields
+                          
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              // First input field with label
+                             
 
                               Expanded(
                                 child: Column(
@@ -140,16 +139,16 @@ class _productState extends State<product> {
                                         if (value == null || value.isEmpty) {
                                           return 'Item name can\'t be empty';
                                         }
-                                        return null; // Return null if validation passes
+                                        return null; 
                                       },
                                     ),
                                   ],
                                 ),
                               ),
                               const SizedBox(
-                                  width: 20), // Space between the two fields
+                                  width: 20), 
 
-                              // Second input field with label
+                              
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -181,7 +180,7 @@ class _productState extends State<product> {
                                         if (int.tryParse(value) == null) {
                                           return 'Enter a valid number for quantity';
                                         }
-                                        return null; // Return null if validation passes
+                                        return null; 
                                       },
                                     ),
                                   ],
@@ -219,7 +218,7 @@ class _productState extends State<product> {
                                         if (double.tryParse(value) == null) {
                                           return 'Enter a valid number for price';
                                         }
-                                        return null; // Return null if validation passes
+                                        return null;
                                       },
                                     ),
                                   ],
@@ -255,7 +254,7 @@ class _productState extends State<product> {
                                         }if (int.tryParse(value) == null) {
                                           return 'Enter a valid value for CGST';
                                         }
-                                        return null; // Return null if validation passes
+                                        return null; 
                                       },
                                     ),
                                   ],
@@ -291,7 +290,7 @@ class _productState extends State<product> {
                                         }if (int.tryParse(value) == null) {
                                           return 'Enter a valid value for SGST';
                                         }
-                                        return null; // Return null if validation passes
+                                        return null;
                                       },
                                     ),
                                   ],
@@ -321,10 +320,10 @@ class _productState extends State<product> {
                                         if (states
                                             .contains(WidgetState.hovered)) {
                                           return Color(
-                                              0xFFFFFFFF); // Hover color
+                                              0xFFFFFFFF); 
                                         }
                                         return Color(
-                                            0xFFFFFFFF); // Default color (no hover)
+                                            0xFFFFFFFF); 
                                       },
                                     ),
                                     overlayColor:
@@ -333,10 +332,10 @@ class _productState extends State<product> {
                                         if (states
                                             .contains(WidgetState.hovered)) {
                                           return Color(
-                                              0xFF1EB386); // Hover color
+                                              0xFF1EB386);
                                         }
                                         return Color(
-                                            0xFF1EB386); // Default color (no hover)
+                                            0xFF1EB386); 
                                       },
                                     ),
                                     backgroundColor: WidgetStateProperty.all(
@@ -355,10 +354,10 @@ class _productState extends State<product> {
                                         if (states
                                             .contains(WidgetState.hovered)) {
                                           return Color(
-                                              0xFFFFFFFF); // Hover color
+                                              0xFFFFFFFF); 
                                         }
                                         return Color(
-                                            0xFFFFFFFF); // Default color (no hover)
+                                            0xFFFFFFFF); 
                                       },
                                     ),
                                     overlayColor:
@@ -367,10 +366,10 @@ class _productState extends State<product> {
                                         if (states
                                             .contains(WidgetState.hovered)) {
                                           return Color(
-                                              0xFF5B89FF); // Hover color
+                                              0xFF5B89FF); 
                                         }
                                         return Color(
-                                            0xFF5B89FF); // Default color (no hover)
+                                            0xFF5B89FF); 
                                       },
                                     ),
                                     backgroundColor: WidgetStateProperty.all(
