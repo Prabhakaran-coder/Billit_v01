@@ -233,11 +233,13 @@ Track payment status and maintain payment records
 
 ### Customers
 
-![Customers](screenshots/customers.png)
+<img width="815" height="318" alt="image" src="https://github.com/user-attachments/assets/7e5d740f-8a8a-4c2d-b410-ab41be67764d" />
+
 
 ### Products
 
-![Products](screenshots/products.png)
+<img width="821" height="323" alt="image" src="https://github.com/user-attachments/assets/6ece7b34-10e8-4942-8881-872db3078811" />
+
 
 ### Invoice
 <img width="940" height="529" alt="image" src="https://github.com/user-attachments/assets/1232c4a9-0322-40f3-a3a6-999fdfd58584" />
