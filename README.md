@@ -244,11 +244,12 @@ Track payment status and maintain payment records
 ### Invoice
 <img width="940" height="529" alt="image" src="https://github.com/user-attachments/assets/1232c4a9-0322-40f3-a3a6-999fdfd58584" />
 
-<img width="959" height="524" alt="image" src="https://github.com/user-attachments/assets/40690781-19a5-4b48-865f-8879cea2da54" />
+<img width="959" height="521" alt="image" src="https://github.com/user-attachments/assets/afc95bbd-8e70-4e2a-b941-a07447da3db5" />
 
 
 ### EMAIL
-<img width="940" height="425" alt="image" src="https://github.com/user-attachments/assets/fa4276d6-da80-4e1b-80d7-d70ba4ed1137" />
+<img width="831" height="346" alt="image" src="https://github.com/user-attachments/assets/f69aec78-2aeb-4648-b4f4-ea252407e1e9" />
+
 
 
 ---
