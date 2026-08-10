@@ -244,8 +244,8 @@ Track payment status and maintain payment records
 ### Invoice
 <img width="940" height="529" alt="image" src="https://github.com/user-attachments/assets/1232c4a9-0322-40f3-a3a6-999fdfd58584" />
 
-
 <img width="940" height="507" alt="image" src="https://github.com/user-attachments/assets/3a43c0ec-ea9c-4119-8de4-1080e1e358e8" />
+
 
 ### EMAIL
 <img width="940" height="425" alt="image" src="https://github.com/user-attachments/assets/fa4276d6-da80-4e1b-80d7-d70ba4ed1137" />
